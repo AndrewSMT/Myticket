@@ -1,0 +1,25 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common"/>
+<body>
+<div th:replace="fragments/header"/>
+
+<div class="row row-cols-1  row-cols-md-2">
+        <div class="col mb-4">
+            <div  id="main-de" class="card">
+                    <img id="main-img" th:src="${event.picture}" class="card-img-top">
+            </div>
+        </div>
+    <div class="col mb-4">
+        <div class="card-body">
+            <h5 class="card-title" th:text="${event.title}"></h5>
+            <p class="card-text" th:text="${event.description}"></p>
+            <a href="#" class="btn btn-warning">Оформить заказ</a>
+        </div>
+    </div>
+    <div class="col mb-4">
+    </div>
+</div>
+
+
+</body>
+</html>

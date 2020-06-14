@@ -1,0 +1,20 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common"/>
+<body>
+<div th:replace="fragments/header"/>
+
+<div class="row row-cols-1  row-cols-md-2">
+    <l th:each="event : ${events}">
+    <div class="col mb-4">
+        <div  id="main-d" class="card">
+            <a th:href="@{|/event/${event.id}|}">
+            <img id="main-img" th:src="${event.picture}" class="card-img-top"></a>
+            <div class="card-body bg-warning">
+                <h5 class="card-title" th:text="${event.title}"></h5>
+            </div>
+        </div>
+    </div>
+    </l>
+</div>
+</body>
+</html>
