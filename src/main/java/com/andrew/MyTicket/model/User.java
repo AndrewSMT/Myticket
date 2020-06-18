@@ -13,13 +13,16 @@ import java.util.Set;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long id_user;
     private String username;
     private String password;
     private String email;
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_role",joinColumns = @JoinColumn(name = "user_id"))
+    @CollectionTable(name = "user_role",joinColumns = @JoinColumn(name = "id_user"))
     private Set<Role> roles;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_cart", referencedColumnName = "id_cart")
+    private Cart cart;
 
     public boolean isAdmin(){
         return roles.contains(Role.ADMIN);

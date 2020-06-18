@@ -1,7 +1,9 @@
 package com.andrew.MyTicket.service;
 
+import com.andrew.MyTicket.model.Cart;
 import com.andrew.MyTicket.model.Role;
 import com.andrew.MyTicket.model.User;
+import com.andrew.MyTicket.repositories.CartRepo;
 import com.andrew.MyTicket.repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,17 +21,22 @@ public class UserService implements UserDetailsService{
 
     @Autowired
     private UserRepo userRepo;
+    @Autowired
+    private CartRepo cartRepo;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     public boolean addUser(User user){
             User userFromDb = userRepo.findByUsername(user.getUsername());
+            Cart userCart = new Cart();
+            userCart.setId_cart(user.getId_user());
             if(userFromDb != null){
                 return false;
             }
         user.setRoles(Collections.singleton(Role.USER));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        cartRepo.save(userCart);
         userRepo.save(user);
         return true;
     }

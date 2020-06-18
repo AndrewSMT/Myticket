@@ -13,7 +13,8 @@
         <div class="card-body">
             <h5 class="card-title" th:text="${event.title}"></h5>
             <p class="card-text" th:text="${event.description}"></p>
-            <a href="#" class="btn btn-warning">Оформить заказ</a>
+            <p class="card-text" th:text="${event.date}"></p>
+            <a th:href="@{|/order/${event.id}|}" class="btn btn-warning">Make order</a>
         </div>
     </div>
     <div class="col mb-4">

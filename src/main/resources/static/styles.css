@@ -4,6 +4,7 @@
 
 html,body {
 margin-top: 50px;
+    font-family: 'Numans', sans-serif;
 }
 
 #log  {
@@ -111,4 +112,15 @@ input:focus{
     width: 402px;
     height:420px;
     margin: 30px;
+}
+
+#ticket-row {
+   margin-left: 20%;
+}
+#stage{
+    width: 70%;
+    margin-left: 15%;
+}
+#row {
+    flex-grow: 0;
 }
