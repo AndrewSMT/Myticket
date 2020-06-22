@@ -1,0 +1,34 @@
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common"/>
+<body>
+<div th:replace="fragments/header"/>
+<p th:text="${message}"></p>
+<form th:action="@{/admin/addEvent}"  method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label>Title</label>
+        <input type="text" class="form-control" id="title" name="title">
+    </div>
+    <div class="form-group">
+        <label>Place</label>
+        <select class="form-control" id="place" name="place">
+            <list th:each="place : ${places}">
+            <option th:text="${place.title}" th:value="${place.id_place}"></option>
+            </list>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Date</label>
+        <input type="datetime-local" class="form-control" id="date" name="date">
+    </div>
+    <div class="form-group">
+        <label>Description</label>
+        <textarea class="form-control" id="description" rows="3" name="description"></textarea>
+    </div>
+    <div class="form-group">
+        <label>Picture</label>
+        <input type="file" class="form-control-file" id="file" name="file">
+    </div>
+    <button type="submit" class="btn btn-primary">Finish</button>
+</form>
+</body>
+</html>

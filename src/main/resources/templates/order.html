@@ -4,29 +4,32 @@
 <div th:replace="fragments/header"/>
 <img id="stage" src="http://localhost:8080/picture/Stage.jpg">
 <div id="ticket-row">
-<list th:each="row : ${setRow}">
+    <list th:each="row : ${setRow}">
         <div th:with="counter=${row}">
-            <div  class="row row-cols-1  row-cols-md-2">
+            <div class="row row-cols-1  row-cols-md-2">
                 <div id="row" class="col mb-4">
                     <span th:text="${counter}"></span>
                 </div>
                 <list th:each="ticket : ${tickets}">
                     <div th:if="${ticket.row_ticket}==${counter}" class="col mb-4">
-                        <form th:action="@{|/order/ticket/${ticket.id_ticket}|}" method="get">
-                            <button class="card-body bg-warning" type="submit" th:text="${ticket.number}"></button>
-                        </form>
+                        <st th:each="status : ${ticket.ticketStatus}">
+                            <div  th:if="${status.toString()  == 'ACTIVE' }">
+                            <form   th:action="@{|/order/ticket/${ticket.id_ticket}|}" method="get">
+                                <button class="card-body bg-warning" type="submit" th:text="${ticket.number}"></button>
+                            </form>
+                            </div>
+                            <div  th:if="${status.toString()  == 'BLOCKED' || status.toString()  =='SOLD' }">
+                                <form   th:action="@{|/order/ticket/${ticket.id_ticket}|}" method="get">
+                                    <button class="card-body bg-warning" type="submit" disabled th:text="${ticket.number}"></button>
+                                </form>
+                            </div>
+                        </st>
                     </div>
                 </list>
                 <span th:text="${counter}"></span>
             </div>
         </div>
-</list>
-</div>
-<div>
-    <list th:each="cart : ${userCart}">
-        <p th:text="${cart}"></p>
     </list>
 </div>
-
 </body>
 </html>

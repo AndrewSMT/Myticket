@@ -2,5 +2,35 @@
 <head th:replace="fragments/common"/>
 <body>
 <div th:replace="fragments/header"/>
+<div th:if="${userCart == null}">
+    <p>Payment was successful</p>
+    <p>Thanks for buying tickets</p>
+</div>
+<div th:if="${userCart != null}">
+    <hr style="margin-left: 20px">
+    <list th:each="cart : ${userCart}">
+        <list th:each="ticket : ${cart.ticket}">
+            <img id="ticket-pic"
+                 src="picture/ticket-svgrepo-com.svg"
+                 alt="За стеклом">
+            <div id="card-list">
+                <span>Row: </span><span th:text="${ticket.row_ticket}"></span>,
+                <span> Place: </span><span th:text="${ticket.number}"></span>
+                <br>
+                <span th:text="${ticket.event.title}"></span>
+                <br>
+                <span th:text="${ticket.event.date}"></span>
+                <span th:text="${ticket.event.place.title}"></span>
+                <span th:text="${ticket.event.place.city.title}"></span>
+                <br>
+                <span> Price: </span><span th:text="${ticket.price}"></span>
+                <hr>
+            </div>
+        </list>
+    </list>
+    <form class="form-inline my-2 my-lg-0 ml-3" th:action="@{/cart/pay}" method="get">
+        <button class="btn btn-success" type="submit">Pay for the order</button>
+    </form>
+</div>
 </body>
 </html>

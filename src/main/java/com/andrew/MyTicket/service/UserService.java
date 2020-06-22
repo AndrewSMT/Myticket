@@ -29,14 +29,11 @@ public class UserService implements UserDetailsService{
 
     public boolean addUser(User user){
             User userFromDb = userRepo.findByUsername(user.getUsername());
-            Cart userCart = new Cart();
-            userCart.setId_cart(user.getId_user());
             if(userFromDb != null){
                 return false;
             }
         user.setRoles(Collections.singleton(Role.USER));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        cartRepo.save(userCart);
         userRepo.save(user);
         return true;
     }
