@@ -2,8 +2,9 @@ package com.andrew.MyTicket.controller;
 
 import com.andrew.MyTicket.model.*;
 import com.andrew.MyTicket.model.Event;
-import com.andrew.MyTicket.repositories.CartRepo;
+import com.andrew.MyTicket.repositories.OrderRepo;
 import com.andrew.MyTicket.repositories.TicketRepo;
+import com.andrew.MyTicket.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -14,7 +15,8 @@ import javax.servlet.http.HttpSession;
 import java.util.*;
 import java.util.List;
 
-@SessionAttributes(value = "userCart")
+@SessionAttributes({"userCart", "order"})
+
 @Controller
 @RequestMapping("/order")
 public class OrderController {
@@ -22,17 +24,33 @@ public class OrderController {
     @Autowired
     private TicketRepo ticketRep;
 
+    @Autowired
+    private OrderService orderService;
 
 
     @GetMapping("{id}")
-    private String getTickets(@PathVariable("id") Event event, Model model) {
-        model.addAttribute("tickets", ticketRep.findTicketByEvent(event));
+    private String getTickets(@AuthenticationPrincipal User user, @PathVariable("id") Event event, HttpSession httpSession, Model model) {
         List<Ticket> tickets = ticketRep.findTicketByEvent(event);
         Set<Integer> setRow = new HashSet<>();
         for (Ticket t : tickets) {
-            setRow.add(t.getRow_ticket());
+            setRow.add(t.getRow());
+        }
+        Cart cart = (Cart) httpSession.getAttribute("userCart");
+        if (cart != null){
+            for (Ticket ticket : tickets) {
+                for (Ticket cartT : cart.getTicket()) {
+                    if (ticket.getId_ticket().equals(cartT.getId_ticket())) {
+                        ticket.setUserCart(user);
+                        break;
+                    } else {
+                        ticket.setUserCart(new User());
+                    }
+                }
+            }
         }
         model.addAttribute("setRow", setRow);
+        model.addAttribute("user", user);
+        model.addAttribute("tickets",tickets);
         return "order";
     }
 
@@ -45,15 +63,55 @@ public class OrderController {
         ticketRep.save(ticket);
 
         Cart cart = (Cart) httpSession.getAttribute("userCart");
+
         if (cart == null) {
             cart = new Cart();
             cart.setId_cart(user.getId_user());
         }
 
+        Orderr order = (Orderr) httpSession.getAttribute("order");
+        if(order == null){
+            order = new Orderr();
+            order.setId_order(orderService.genNumberForOrder());
+            order.setUser(user);
+            order.setOrderStatus(Collections.singleton(OrderStatus.NOTPAYED));
+        }
+
         cart.getTicket().add(ticket);
         cart.setTicket(cart.getTicket());
+
+        order.getTicket().add(ticket);
+        order.setTicket(order.getTicket());
+
         httpSession.setAttribute("userCart", cart);
+        httpSession.setAttribute("order", order);
         return "redirect:/order/" + ticket.getEvent().getId();
     }
-
+    @GetMapping("/ticket/timeout")
+    private void orderTimeOut (@AuthenticationPrincipal User user, HttpSession httpSession, Model model){
+        Runnable run = ()->{
+            try {
+                Thread.sleep(900000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Cart cart = (Cart) httpSession.getAttribute("userCart");
+            if(cart.getTicket()!= null) {
+                Set<Ticket> tickets = cart.getTicket();
+                for (Ticket ticket : tickets) {
+                    if(ticket.getTicketStatus().contains(TicketStatus.BLOCKED)) {
+                        ticket.setTicketStatus(Collections.singleton(TicketStatus.ACTIVE));
+                        ticketRep.save(ticket);
+                    }
+                }
+            }
+            httpSession.removeAttribute("userCart");
+            model.addAttribute("userCart", httpSession.getAttribute("userCart"));
+        };
+        Thread myThread = new Thread(run,user.getUsername());
+            myThread.start();
+    }
 }
+
+
+

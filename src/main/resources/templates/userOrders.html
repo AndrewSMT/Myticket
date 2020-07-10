@@ -1,0 +1,54 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common"/>
+<body style="margin-top: 0px">
+<div th:replace="fragments/header"/>
+<div class="row">
+<div id="profile-menu" class="card">
+    <div class="card-body bg-dark">
+        <div class="menu-profile-item"><img class="img-profile_menu" src="/picture/user.svg"/>
+            <a class="badge badge-dark w-75" href="/user/userProfile"><h6>My profile</h6></a></div>
+
+        <div class="menu-profile-item"><img class="img-profile_menu" src="/picture/ticket-svgrepo-com.svg">
+            <a class="badge badge-dark  w-75 " href="/user/userTickets"><h6> My tickets</h6></a></div>
+        <div class="menu-profile-item"><img class="img-profile_menu" src="/picture/order.svg">
+            <a class="badge badge-dark  w-75 " href="/user/userOrders"><h6>My order</h6></a></div>
+
+    </div>
+</div>
+<div id="user-tickets">
+    <div class="text-center">
+        <span class="h1">My Orders</span>
+    </div>
+    <table class="table table-bordered table-hover mt-2" th:if="${orders != null}">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Order №</th>
+            <th scope="col">User</th>
+            <th scope="col">Order status</th>
+            <th scope="col">Tickets of order</th>
+        </tr>
+        </thead>
+        <tbody th:each="order: ${orders}">
+        <tr>
+            <td th:text="${order.id_order}"></td>
+            <td th:text="${order.user.username}"></td>
+            <td th:text="${order.orderStatus}"></td>
+            <td>
+                <form method="get" action="/user/userTickets/search">
+                    <input type="number" class="form-control w-100" hidden  name="order" th:value="${order.id_order}">
+                    <input type="text" class="form-control w-100" hidden  name="city">
+                    <input type="text" class="form-control w-100" hidden  name="event">
+                    <input type="datetime-local" class="form-control w-100" hidden  name="date">
+                    <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Check tickets</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</div>
+<div th:if="${orders == null}" class="alert alert-info  m-5">
+    <p>You don't have orders</p>
+</div>
+</body>
+</html>

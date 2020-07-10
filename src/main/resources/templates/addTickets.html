@@ -3,6 +3,42 @@
 <body>
 <div th:replace="fragments/header"/>
 
-
+<p th:text="${message}"></p>
+<form id="event-form" th:action="@{/admin/addTickets}" method="post">
+    <div class="form-group">
+        <label>Title</label>
+        <input type="text" class="form-control" name="title">
+    </div>
+    <div class="form-group">
+        <label>Date</label>
+        <input type="datetime-local" class="form-control" id="date" name="date">
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label>Row from </label>
+            <input type="text" class="form-control" name="row_ticket_from">
+        </div>
+        <div class="form-group col-md-4">
+            <label>Row to</label>
+            <input type="text" class="form-control" name="row_ticket_to">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label>Place from </label>
+            <input type="text" class="form-control" name="place1">
+        </div>
+        <div class="form-group col-md-4">
+            <label>Place to</label>
+            <input type="text" class="form-control" name="place2">
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Price</label>
+        <input type="text" class="form-control" name="price">
+    </div>
+    <button type="submit" class="btn btn-primary">Finish</button>
+</form>
+<div th:replace="fragments/footer"/>
 </body>
 </html>

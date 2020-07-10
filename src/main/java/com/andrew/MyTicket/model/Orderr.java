@@ -10,7 +10,6 @@ import java.util.Set;
 @Entity
 public class Orderr {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id_order;
     @ElementCollection(targetClass = OrderStatus.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "order_status",joinColumns = @JoinColumn(name = "id_order"))
@@ -22,4 +21,6 @@ public class Orderr {
     @JoinTable(name="order_ticket", joinColumns = {@JoinColumn(name="id_order")},
             inverseJoinColumns = {@JoinColumn(name = "id_ticket")})
     private Set<Ticket> ticket = new HashSet<>();
+
+
 }

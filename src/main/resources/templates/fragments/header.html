@@ -1,5 +1,5 @@
 <div xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://org.thymeleaf.extras/thymeleaf-extras-springsecurity5">
-    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-warning">
+    <nav  class="navbar fixed-top navbar-expand-lg navbar-light bg-warning">
         <a class="navbar-brand" href="/">MyTicket</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -8,21 +8,18 @@
 
         <div class="collapse navbar-collapse " id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Profile</a>
+                <div sec:authorize="hasAuthority('USER')">
+                            <a  class="btn btn-warning " href="/user/userProfile">Profile</a>
+
+                    </li>
+                </div>
+                <li>
+                    <button type="button" class="btn btn-warning " data-toggle="modal" data-target="#exampleModal">
+                        Cities
+                    </button>
+                    <!-- Modal -->
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="citys" role="button" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">
-                        Citys
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                </li>
+
                 <div sec:authorize="hasAuthority('ADMIN')">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
@@ -30,17 +27,17 @@
                             Admin panel
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="#">Check user</a>
+                            <a class="dropdown-item" href="/admin/userList">Admin function</a>
                             <a class="dropdown-item" href="/admin/addEvent">Add event</a>
                             <a class="dropdown-item" href="/admin/addTickets">Add tickets</a>
-                            <a class="dropdown-item" href="">Check reports</a>
                         </div>
                     </li>
                 </div>
             </ul>
             <div id="search">
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control  mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <form class="form-inline my-2 my-lg-0" method="get" action="/main/search">
+                    <input class="form-control  mr-sm-2" name="searchText" minlength="2" type="search"
+                           th:value="${searchText}" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Search</button>
                 </form>
             </div>
@@ -73,4 +70,44 @@
         </div>
 </div>
 </nav>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Change city</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-borderless">
+                    <tbody>
+                    <tr>
+                        <td> <a class="text-black-50" href="/main/kharkiv">Kharkiv</a></td>
+                        <td><a class="text-black-50" href="/main/kyiv">Kyiv</a></td>
+                        <td><a class="text-black-50" href="/main/jdesa">Odesa</a></td>
+                    </tr>
+                    <tr>
+                        <td><a class="text-black-50" href="/main/dnipro">Dnipro</a></td>
+                        <td> <a class="text-black-50" href="/main/donetsk">Donetsk</a></td>
+                        <td><a class="text-black-50" href="/main/zaporizhia">Zaporizhia</a></td>
+                    </tr>
+                    <tr>
+                        <td><a class="text-black-50" href="/main/lviv">Lviv</a></td>
+                        <td> <a class="text-black-50"  href="/main/mariupol">Mariupol</a></td>
+                        <td><a class="text-black-50" href="/main/sevastopol">Sevastopol</a></td>
+                    </tr>
+                    <tr>
+                        <td> <a class="text-black-50" href="/main/vinnytsia">Vinnytsia</a></td>
+                        <td> <a class="text-black-50" href="/main/makiivka">Makiivka</a></td>
+                        <td> <a class="text-black-50" href="/main/kherson">Kherson</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
 </div>

@@ -1,8 +1,10 @@
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head th:replace="fragments/common"/>
 <body>
 <div th:replace="fragments/header"/>
 <img id="stage" src="http://localhost:8080/picture/Stage.jpg">
+<span id="row1">Row</span><span id="places">Places</span><span id="row2">Row</span>
+<hr>
 <div id="ticket-row">
     <list th:each="row : ${setRow}">
         <div th:with="counter=${row}">
@@ -11,16 +13,34 @@
                     <span th:text="${counter}"></span>
                 </div>
                 <list th:each="ticket : ${tickets}">
-                    <div th:if="${ticket.row_ticket}==${counter}" class="col mb-4">
+                    <div th:if="${ticket.row}==${counter}" class="col mb-4">
                         <st th:each="status : ${ticket.ticketStatus}">
-                            <div  th:if="${status.toString()  == 'ACTIVE' }">
-                            <form   th:action="@{|/order/ticket/${ticket.id_ticket}|}" method="get">
-                                <button class="card-body bg-warning" type="submit" th:text="${ticket.number}"></button>
-                            </form>
+                            <div th:if="${status.toString()  == 'ACTIVE' }">
+                                <form id="form" th:action="@{|/order/ticket/${ticket.id_ticket}|}" method="get">
+                                    <button id="order-a" type="submit" onclick="myFunction()"
+                                            th:data-title="${'Row: '+ ticket.row+' Place: '+ ticket.number +' Price: '+ ticket.price +' UAH'+' Avalible'}"
+                                            class="card-body"
+                                    ><img id="img-order-av" class="footer-img" src="/picture/iconfinder_8_3898372.svg"/>
+                                    </button>
+                                </form>
                             </div>
-                            <div  th:if="${status.toString()  == 'BLOCKED' || status.toString()  =='SOLD' }">
-                                <form   th:action="@{|/order/ticket/${ticket.id_ticket}|}" method="get">
-                                    <button class="card-body bg-warning" type="submit" disabled th:text="${ticket.number}"></button>
+                                <div th:if="${status.toString()  =='BLOCKED' and ticket.userCart == user}">
+                                    <form th:action="@{|/order/ticket/${ticket.id_ticket}|}" method="get">
+                                        <button id="order-cart"
+                                                th:data-title="${'Row: '+ ticket.row+' Place: '+ ticket.number +' Price: '+ ticket.price +' UAH'+' In cart'}"
+                                                class="card-body" type="submit" disabled
+                                        ><img id="img-order-cart" class="footer-img"
+                                              src="/picture/iconfinder_8_3898372.svg"/></button>
+                                    </form>
+                                </div>
+                            <div th:if="${status.toString()  == 'SOLD' or status.toString()  =='BLOCKED' and ticket.userCart != user}">
+
+                                <form th:action="@{|/order/ticket/${ticket.id_ticket}|}" method="get">
+                                    <button id="order-d"
+                                            th:data-title="${'Row: '+ ticket.row+' Place: '+ ticket.number +' Price: '+ ticket.price +' UAH'+' Not avalible'}"
+                                            class="card-body" type="submit" disabled
+                                    ><img id="img-order-ds" class="footer-img"
+                                          src="/picture/iconfinder_8_3898372.svg"/></button>
                                 </form>
                             </div>
                         </st>
@@ -31,5 +51,12 @@
         </div>
     </list>
 </div>
+<script>
+    function myFunction() {
+        alert("You have fifteen minutes to complete your order, after \nthe time has expired your ticket will be returned")
+        fetch('http://localhost:8080/order/ticket/timeout');
+    }
+</script>
+<div th:replace="fragments/footer"/>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <body>
 <div th:replace="fragments/header"/>
 <p th:text="${message}"></p>
-<form th:action="@{/admin/addEvent}"  method="post" enctype="multipart/form-data">
+<form id="event-form" th:action="@{/admin/addEvent}"  method="post" enctype="multipart/form-data">
     <div class="form-group">
         <label>Title</label>
         <input type="text" class="form-control" id="title" name="title">
@@ -30,5 +30,6 @@
     </div>
     <button type="submit" class="btn btn-primary">Finish</button>
 </form>
+<div th:replace="fragments/footer"/>
 </body>
 </html>

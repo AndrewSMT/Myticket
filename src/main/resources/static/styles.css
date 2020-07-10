@@ -1,13 +1,15 @@
 /* Made with love by Mutiullah Samim*/
-
 @import url('https://fonts.googleapis.com/css?family=Numans');
 
-html,body {
-margin-top: 50px;
+html, body {
+    position: relative;
+    min-height: 100%;
+    overflow-x: hidden;
+    margin-top: 50px;
     font-family: 'Numans', sans-serif;
 }
 
-#log  {
+#log {
     background-image: url('https://www.fancypeanuts.ru/wp-content/uploads/2019/02/o-ROCK-CONCERT-facebook.jpg');
     background-size: cover;
     background-repeat: no-repeat;
@@ -15,120 +17,357 @@ margin-top: 50px;
     font-family: 'Numans', sans-serif;
 }
 
-.container{
+.container {
     height: 100%;
     align-content: center;
 }
 
-.card{
+.card {
     height: 370px;
     margin-top: auto;
     margin-bottom: auto;
     width: 400px;
-    background-color: rgba(0,0,0,0.5) !important;
+    background-color: rgba(0, 0, 0, 0.5) !important;
 }
 
-.social_icon span{
+.social_icon span {
     font-size: 60px;
     margin-left: 10px;
     color: #FFC312;
 }
 
-.social_icon span:hover{
+.social_icon span:hover {
     color: white;
     cursor: pointer;
 }
 
-.card-header h3{
+.card-header h3 {
     color: white;
 }
 
-.social_icon{
+.social_icon {
     position: absolute;
     right: 20px;
     top: -45px;
 }
 
-.input-group-prepend span{
+.input-group-prepend span {
     width: 50px;
     background-color: #FFC312;
     color: black;
-    border:0 !important;
+    border: 0 !important;
 }
 
-input:focus{
-    outline: 0 0 0 0  !important;
+input:focus {
+    outline: 0 0 0 0 !important;
     box-shadow: 0 0 0 0 !important;
 
 }
 
-.remember{
+.remember {
     color: white;
 }
 
-.remember input
-{
+.remember input {
     width: 20px;
     height: 20px;
     margin-left: 15px;
     margin-right: 5px;
 }
 
-.login_btn{
+.login_btn {
     color: black;
     background-color: #FFC312;
     width: 100px;
 }
 
-.login_btn:hover{
+.login_btn:hover {
     color: black;
     background-color: white;
 }
 
-.links{
+.links {
     color: white;
 }
 
-.links a{
+.links a {
     margin-left: 4px;
 }
-.sign-out{
+
+.sign-out {
     margin-left: 4px;
 }
+
 #main-img {
-    width: 400px;
-    height:420px;
+    width: 230px;
+    height: 319px;
 }
+
+#event-img {
+    width: 300px;
+    height: 400px;
+}
+
 #main-d {
-    width: 402px;
-    height:500px;
+    width: 230px;
+    height: 320px;
     margin: 30px;
 }
-#search{
+
+#search {
     margin-right: 35%;
 }
 
 #main-de {
-    width: 402px;
-    height:420px;
-    margin: 30px;
+    width: 302px;
+    height: 400px;
+    margin-left: 100px;
 }
 
 #ticket-row {
-   margin-left: 20%;
+    margin-left: 13%;
+    text-align: center;
 }
-#stage{
+
+#stage {
     width: 70%;
-    margin-left: 15%;
+    margin-left: 16%;
 }
+
 #row {
     flex-grow: 0;
 }
+
 #card-list {
     margin-left: 20px;
 }
-#ticket-pic{
+
+#ticket-pic {
     width: 60px;
     height: 60px;
     margin-left: 20px;
+}
+
+#event-form {
+    margin-left: 35%;
+    width: 30%;
+}
+
+#button-row {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+#user-form {
+    margin-left: 35%;
+    width: 30%;
+}
+
+.footer-et {
+    margin-top: 10px;
+    color: white;
+    font-size: 1em;
+}
+
+.footer-im {
+    margin-left: 70%;
+}
+
+.footer-img {
+    margin-left: 5px;
+    width: 25px;
+    height: 25px;
+}
+
+#reg-form {
+    margin-top: 100px;
+    hight: 250px;
+}
+
+.error {
+    color: #ff2247;
+}
+
+#asd {
+    margin-left: 100px;
+}
+
+#main-d:hover::after {
+    content: attr(data-title);
+    position: absolute;
+
+    left: -1;
+    right: -1;
+    bottom: -1;
+    z-index: 1;
+    background: rgba(80, 67, 145, 0.8);
+    color: #fff;
+    text-align: center;
+    font-family: 'Numans', sans-serif;
+    font-size: 21px;
+    padding: 5px 10px;
+    border: 1px solid #333;
+}
+
+#order-a:hover::after {
+    content: attr(data-title);
+    position: absolute;
+    left: -6px;
+    right: 0;
+    bottom: 55px;
+    z-index: 1;
+    background-color: #7599ff;
+    color: #fff;
+    text-align: center;
+    font-family: 'Numans', sans-serif;
+    font-size: 12px;
+    width: 100px;
+    height: 55px;
+    border-radius: 10px;
+    border: 1px solid #333;
+}
+
+#order-d:hover::after {
+    content: attr(data-title);
+    position: absolute;
+    left: -6px;
+    right: 0;
+    bottom: 55px;
+    z-index: 1;
+    background: rgb(128, 137, 126);
+    color: #fff;
+    text-align: center;
+    font-family: 'Numans', sans-serif;
+    font-size: 12px;
+    width: 100px;
+    height: 55px;
+    border-radius: 10px;
+    border: 1px solid #333;
+}
+
+#order-cart:hover::after {
+    content: attr(data-title);
+    position: absolute;
+    left: -6px;
+    right: 0;
+    bottom: 55px;
+    z-index: 1;
+    background: rgb(128, 137, 126);
+    color: #fff;
+    text-align: center;
+    font-family: 'Numans', sans-serif;
+    font-size: 12px;
+    width: 100px;
+    height: 55px;
+    border-radius: 10px;
+}
+
+#row1 {
+    margin-left: 13%;
+}
+
+#row2 {
+    margin-left: 32%;
+}
+
+#places {
+    margin-left: 32%;
+}
+
+#footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+#img-order-av {
+    width: 25px;
+    height: 25px;
+}
+
+#img-order-ds {
+    width: 25px;
+    height: 25px;
+}
+
+#order-d {
+    background-color: rgb(128, 137, 126);
+}
+
+#order-a {
+    background-color: #7599ff;
+}
+
+#order-cart {
+    background-color: #00ff2e;
+}
+
+#img-order-cart {
+    width: 25px;
+    height: 25px;
+}
+
+#ticket-close {
+    margin-left: 250px;
+}
+
+#ticket-pic-ord {
+    margin-left: 20px;
+}
+
+#profile-menu {
+    position: fixed;
+    height: 100%;
+    width: 200px;
+}
+
+.menu-profile-item {
+    margin: 5px;
+    padding: 2px;
+    border: outset;
+    border-radius: 10px;
+}
+
+.img-profile_menu {
+    height: 30px;
+    width: 30px;
+}
+
+#profile {
+    margin-top: 20px;
+    background-color: white;
+    position: absolute;
+    margin-left: 300px;
+    width: 30%;
+}
+
+.img-edit-button {
+    background: url(/picture/edit.svg);
+    width: 25px;
+    height: 25px;
+    border: solid silver 2px;
+
+}
+#profile-icon{
+    width: 150px;
+    height: 150px;
+    border: solid silver 2px;
+}
+#user-tickets{
+    margin:5px;
+    background-color: white;
+    margin-left: 200px;
+    width: 100%;
+}
+#filter-icon{
+    margin-top: 8px;
+    margin-left: 25%;
+    position: absolute;
+}
+#bt{
+    width: 115px;
+}
+#inp{
+    width: 200px;
+    margin-left: 8px;
 }

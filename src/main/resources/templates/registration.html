@@ -3,43 +3,54 @@
     <meta charset="UTF-8">
     <title>Registration</title>
     <div th:replace="fragments/common"/>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+          integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
 <body id="log">
 <div th:replace="fragments/header"/>
 <div class="container">
-    <div class="d-flex justify-content-center h-100">
-        <div class="card">
+    <div id="user-form" class="d-flex justify-content-center h-100">
+        <div class="card bg-dark h-auto">
             <div class="card-header">
-                <h3>Registration</h3>
+                <h3 class="text-center">Registration</h3>
                 <div class="d-flex justify-content-end social_icon">
                     <span><i class="fab fa-google-plus-square"></i></span>
                 </div>
             </div>
-            <div class="card-body">
+            <div class="card-body ">
                 <form th:action="@{/registration}" method="post">
-                    <p th:text="${message}"></p>
+                    <div class="input-group form-group ">
+                        <input th:if="${usernameError == null}" type="text" minlength="4" maxlength="22" class="form-control mb-3" placeholder="username"
+                               name="username" autofocus="autofocus">
+                        <input th:if="${usernameError != null}" type="text" minlength="4" maxlength="22"th:value="${user.username}" class="form-control  is-invalid"
+                               placeholder="username"
+                               name="username" autofocus="autofocus">
+                        <div class="invalid-feedback" th:text="${usernameError}"></div>
+                    </div>
+
                     <div class="input-group form-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-user"></i></span>
-                        </div>
-                        <input type="text" class="form-control" placeholder="username"  name="username" autofocus="autofocus">
+                        <input th:if="${emailError == null}" type="email" class="form-control mb-3" placeholder="email"
+                               name="email" autofocus="autofocus">
+                        <input th:if="${emailError != null}" type="email" th:value="${user.email}" class="form-control is-invalid" placeholder="email"
+                               name="email" autofocus="autofocus">
+                        <div class="invalid-feedback" th:text="${emailError}"></div>
                     </div>
                     <div class="input-group form-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-key"></i></span>
-                        </div>
-                        <input type="password" class="form-control" placeholder="password"  id="password" name="password">
+                        <input th:if="${passwordError == null}"type="password" class="form-control mb-3" minlength="8" maxlength="22"placeholder="password" name="password">
+                        <input th:if="${passwordError != null}" type="password"  class="form-control is-invalid" minlength="8" maxlength="22" placeholder="password" name="password">
+                        <div class="invalid-feedback" th:text="${passwordError}"></div>
+
                     </div>
                     <div class="input-group form-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas "></i>@</span>
-                        </div>
-                        <input type="text" class="form-control" placeholder="email"  id="email" name="email">
+                        <input th:if="${password2Error == null}" type="password" class="form-control mb-3" minlength="8" maxlength="22" placeholder="Repeat password" name="password2">
+                        <input  th:if="${password2Error != null}" type="password" class="form-control is-invalid" minlength="8" maxlength="22"  placeholder="Repeat password" name="password2">
+                        <div class="invalid-feedback" th:text="${password2Error}"></div>
+
                     </div>
-                    <div class="form-group">
-                        <input type="submit" value="Sign up" class="btn float-right login_btn">
+                    <div class="form-group text-center">
+                        <input type="submit" value="Sign up" class="btn  login_btn">
                     </div>
                 </form>
             </div>

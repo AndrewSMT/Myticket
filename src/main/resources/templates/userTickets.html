@@ -1,0 +1,137 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common"/>
+<body style="margin-top: 0px">
+<div th:replace="fragments/header"/>
+<div class="row">
+    <div id="profile-menu" class="card">
+        <div class="card-body bg-dark">
+            <div class="menu-profile-item"><img class="img-profile_menu" src="/picture/user.svg"/>
+                <a class="badge badge-dark w-75" href="/user/userProfile"><h6>My profile</h6></a></div>
+
+            <div class="menu-profile-item"><img class="img-profile_menu" src="/picture/ticket-svgrepo-com.svg">
+                <a class="badge badge-dark  w-75 " href="/user/userTickets"><h6> My tickets</h6></a></div>
+            <div class="menu-profile-item"><img class="img-profile_menu" src="/picture/order.svg">
+                <a class="badge badge-dark  w-75 " href="/user/userOrders"><h6>My order</h6></a></div>
+
+        </div>
+    </div>
+    <div id="user-tickets">
+        <div class="text-center">
+            <span class="h1">My tickets</span>
+            <span id="filter-icon">
+                  <button type="button" class="btn h-0 w-0 bg-white" data-toggle="modal" data-target="#filterModal">
+                       <img src="/picture/filter.svg" class="img-profile_menu">
+                    </button>
+                <a href="/user/userTickets"><img src="/picture/refresh.svg" class="img-profile_menu"></a>
+            </span>
+        </div>
+        <table class="table table-bordered table-hover mt-2" th:if="${tickets != null}">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">Order №</th>
+                <th scope="col">Event</th>
+                <th scope="col">Date</th>
+                <th scope="col">Place</th>
+                <th scope="col">Row</th>
+                <th scope="col">Site</th>
+                <th scope="col">City</th>
+                <th scope="col">Price</th>
+
+            </tr>
+            </thead>
+            <tbody th:each="ticket : ${tickets}">
+            <tr>
+                <td th:text="${ticket.orderNumber}"></td>
+                <td th:text="${ticket.event.title}"></td>
+                <td th:text="${ticket.event.date}"></td>
+                <td th:text="${ticket.event.place.title}"></td>
+                <td th:text="${ticket.row}"></td>
+                <td th:text="${ticket.number}"></td>
+                <td th:text="${ticket.event.place.city.title}"></td>
+                <td th:text="${ticket.price}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <div th:if="${tickets ==null}"  class="alert alert-info  m-5" role="alert">
+            <p>You  don't have purchased tickets yet.</p>
+        </div>
+        <div th:if="${tickets.isEmpty()}"  class="alert alert-info m-5" role="alert">
+            <p>Tickets not found.</p>
+            <p>You must indicate the exact name or date.</p>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Filter by:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="get" action="/user/userTickets/search">
+                    <div class="form-row">
+                        <div class="col">
+                            <a class="badge badge-dark  w-75 " href="/user/userTickets/filter/order"><h6>Order</h6></a>
+                        </div>
+                        <div class="col">
+                            <input type="number" class="form-control w-100" placeholder="Order" name="order">
+                        </div>
+                        <div class="col">
+                            <button class="btn h-0 w-0 bg-white ml-4 " type="submit">
+                                <img src="/picture/search.svg" class="img-profile_menu">
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="form-row">
+                        <div class="col">
+                            <a class="badge badge-dark  w-75 " href="/user/userTickets/filter/event"><h6>Event</h6></a>
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control w-100" placeholder="Event" name="event">
+                        </div>
+                        <div class="col">
+                            <button class="btn h-0 w-0 bg-white ml-4 " type="submit">
+                                <img src="/picture/search.svg" class="img-profile_menu">
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="form-row">
+                        <div class="col">
+                            <a class="badge badge-dark  w-75 " href="/user/userTickets/filter/city"><h6>City</h6></a>
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control w-100" placeholder="City" name="city">
+                        </div>
+                        <div class="col">
+                            <button class="btn h-0 w-0 bg-white ml-4 " type="submit">
+                                <img src="/picture/search.svg" class="img-profile_menu">
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="form-row">
+                        <div class="col">
+                            <a class="badge badge-dark " id="bt" href="/user/userTickets/filter/date"><h6>Date</h6></a>
+                        </div>
+                        <div class="col">
+                            <input type="datetime-local" class="form-control" id="inp" placeholder="Date" name="date">
+                        </div>
+                        <div class="col">
+                            <button class="btn h-0 w-0 bg-white " type="submit">
+                                <img src="/picture/search.svg" class="img-profile_menu">
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

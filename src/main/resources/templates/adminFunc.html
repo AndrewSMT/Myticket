@@ -1,0 +1,146 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common"/>
+<body style="margin-top: 20px">
+<div th:replace="fragments/header"/>
+<div id="button-row">
+    <div style="margin-left: 30%">
+        <form class="form-inline my-2 my-lg-0 ml-3" th:action="@{/admin/userList}" method="get">
+            <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Check user</button>
+        </form>
+    </div>
+    <div>
+        <form class="form-inline my-2 my-lg-0 ml-3" th:action="@{/admin/checkEvents}" method="get">
+            <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Edit event</button>
+        </form>
+    </div>
+    <div>
+        <form class="form-inline my-2 my-lg-0 ml-3" th:action="@{/admin/checkTickets}" method="get">
+            <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Edit ticket</button>
+        </form>
+    </div>
+    <div>
+        <form class="form-inline my-2 my-lg-0 ml-3" th:action="@{/admin/checkOrders}" method="get">
+            <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Check order</button>
+        </form>
+    </div>
+</div>
+<table class="table table-bordered table-hover" th:if="${users != null}">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col"> Username</th>
+        <th scope="col"> Email</th>
+        <th scope="col">Roles</th>
+    </tr>
+    </thead>
+    <tbody th:each="user, count : ${users}">
+    <tr>
+        <th scope="row" th:text="${count.count}"></th>
+        <td th:text="${user.username}"></td>
+        <td th:text="${user.email}"></td>
+        <td th:text="${user.roles}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<table class="table table-bordered table-hover table-" th:if="${events != null}">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col"> Title</th>
+        <th scope="col"> Date</th>
+        <th scope="col">Place</th>
+        <th scope="col">City</th>
+        <th scope="col">Description</th>
+        <th scope="col">Picture</th>
+        <th scope="col">Edit</th>
+        <th scope="col">Delete</th>
+    </tr>
+    </thead>
+    <tbody th:each="event, count : ${events}">
+    <tr>
+        <th scope="row" th:text="${count.count}"></th>
+        <form th:action="|/admin/editEvents/${event.id}|" method="post" enctype="multipart/form-data">
+            <td><input class="form-control" type="text" name="title" th:value="${event.title}"></td>
+            </div>
+            <td><input class="form-control" type="text" name="date" th:value="${event.date}"></td>
+            <td>
+                <div class="form-group">
+                    <select class="form-control" id="place" name="place">
+                        <option selected th:text="${event.place.title}" th:value="${event.place.id_place}"></option>
+                        <list th:each="place : ${places}">
+                            <div th:if="${place.id_place != event.place.id_place}">
+                            <option th:text="${place.title}" th:value="${place.id_place}"></option>
+                            </div>
+                        </list>
+                    </select>
+                </div>
+            </td>
+            <td th:text="${event.place.city.title}"></td>
+            <td><input class="form-control" type="text" name="description" th:value="${event.description}"></td>
+            <td>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" name="file" id="inputGroupFile03"
+                           aria-describedby="inputGroupFileAddon03">
+                    <label class="custom-file-label" for="inputGroupFile03">Choose file</label>
+                </div>
+            <td>
+                <button type="submit" class="btn btn-warning">Edit</button>
+            </td>
+        </form>
+        <td><a th:href="|/admin/delEvents/${event.id}|">Delete</a></td>
+    </tr>
+    </tbody>
+</table>
+<table class="table table-bordered table-hover" th:if="${tickets != null}">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col"> Event</th>
+        <th scope="col"> Row</th>
+        <th scope="col">Number</th>
+        <th scope="col">Price</th>
+        <th scope="col">Status</th>
+        <th scope="col">Edit</th>
+    </tr>
+    </thead>
+    <tbody th:each="ticket, count : ${tickets}">
+    <tr>
+        <th scope="row" th:text="${ticket.id_ticket}"></th>
+        <td th:text="${ticket.event.title}"></td>
+        <td th:text="${ticket.row}"></td>
+        <td th:text="${ticket.number}"></td>
+        <td th:text="${ticket.price}"></td>
+        <td th:text="${ticket.ticketStatus}"></td>
+        <td><a th:href="|/admin/delTickets/${ticket.id_ticket}|">Delete</a></td>
+    </tr>
+    </tbody>
+</table>
+
+<table class="table table-bordered table-hover" th:if="${orders != null}">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Order №</th>
+        <th scope="col">User</th>
+        <th scope="col">Order status</th>
+        <th scope="col">Tickets id</th>
+    </tr>
+    </thead>
+    <tbody th:each="order, count : ${orders}">
+    <tr>
+        <th scope="row" th:text="${count.count}"></th>
+        <td th:text="${order.id_order}"></td>
+        <td th:text="${order.user.username}"></td>
+        <td th:text="${order.orderStatus}"></td>
+        <td>
+            <list th:each="ticket : ${order.ticket}">
+                <span th:text="${ticket.id_ticket}"></span>
+            </list>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div th:replace="fragments/footer"/>
+</body>
+</html>

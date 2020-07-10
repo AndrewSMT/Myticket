@@ -2,25 +2,27 @@
 <head th:replace="fragments/common"/>
 <body>
 <div th:replace="fragments/header"/>
-
 <div class="row row-cols-1  row-cols-md-2">
         <div class="col mb-4">
             <div  id="main-de" class="card">
-                    <img id="main-img" th:src="${event.picture}" class="card-img-top">
+                    <img id="event-img" th:src="${event.picture}" class="card-img-top">
             </div>
         </div>
     <div class="col mb-4">
         <div class="card-body">
-            <h5 class="card-title" th:text="${event.title}"></h5>
+            <h1 class="card-title" th:text="${event.title}"></h1>
+            <span class="card-text" th:text="${event.date}"></span>
+            <p><span class="card-text" th:text="${event.place.title}"></span>,
+            <span class="card-text" th:text="${event.place.city.title}"></span></p>
+            <p><span th:text="${min}"></span>-<span th:text="${max}"></span> UAH (< <span th:text="${count}"/> psc.)</p>
+            <p><a th:href="@{|/order/${event.id}|}" class="btn btn-warning">Make order</a></p>
+            <h2 class="card-text" >About event</h2>
             <p class="card-text" th:text="${event.description}"></p>
-            <p class="card-text" th:text="${event.date}"></p>
-            <a th:href="@{|/order/${event.id}|}" class="btn btn-warning">Make order</a>
         </div>
     </div>
     <div class="col mb-4">
     </div>
 </div>
-
-
+<div th:replace="fragments/footer"/>
 </body>
 </html>
