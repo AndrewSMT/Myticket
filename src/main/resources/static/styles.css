@@ -343,14 +343,19 @@ input:focus {
 
 .img-edit-button {
     background: url(/picture/edit.svg);
-    width: 25px;
-    height: 25px;
-    border: solid silver 2px;
+    width: 23px;
+    height: 23px;
+    border: solid silver 0px;
 
 }
 #profile-icon{
     width: 150px;
     height: 150px;
+    border: solid silver 2px;
+}
+#profile-icon-img{
+    width: 148px;
+    height: 148px;
     border: solid silver 2px;
 }
 #user-tickets{
@@ -370,4 +375,8 @@ input:focus {
 #inp{
     width: 200px;
     margin-left: 8px;
+}
+#event-dis{
+    margin-left: 90px;
+    margin-right: 90px;
 }

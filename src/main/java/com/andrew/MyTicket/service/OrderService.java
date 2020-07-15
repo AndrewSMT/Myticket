@@ -1,17 +1,16 @@
 package com.andrew.MyTicket.service;
 
-import com.andrew.MyTicket.model.*;
+import com.andrew.MyTicket.model.OrderStatus;
+import com.andrew.MyTicket.model.Orderr;
+import com.andrew.MyTicket.model.Ticket;
+import com.andrew.MyTicket.model.User;
 import com.andrew.MyTicket.repositories.OrderRepo;
-import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.Random;
 import java.util.Set;
-import java.util.UUID;
-import java.util.stream.IntStream;
-import java.util.stream.LongStream;
 
 @Service
 public class OrderService {

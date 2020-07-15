@@ -1,13 +1,11 @@
 package com.andrew.MyTicket.controller;
 
 
-import com.andrew.MyTicket.dto.AddTicketsDto;
+import com.andrew.MyTicket.transfer.AddTicketsDto;
 import com.andrew.MyTicket.model.Event;
 import com.andrew.MyTicket.model.Ticket;
-import com.andrew.MyTicket.model.User;
 import com.andrew.MyTicket.repositories.*;
 import com.andrew.MyTicket.service.AdminService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -43,7 +41,6 @@ public class AdminController {
     private OrderRepo orderRepo;
 
 
-
     @GetMapping("/addEvent")
     public String getAddEventPage(Model model) {
         model.addAttribute("places", placeRepo.findAll());
@@ -75,21 +72,9 @@ public class AdminController {
                 model.addAttribute("message", "Tickets added successful");
             }
         }
-/*
-        if(adminService.addTickets(addTicketsDto)){
-            model.addAttribute("message1", "Tickets added successful");
-        }else{
-            model.addAttribute("message1", "Tickets don't added");
-        }*/
         return "addTickets";
     }
 
-   /* @GetMapping("{id}")
-    public String userEdit(@PathVariable("id") User user, Model model) {
-        model.addAttribute(user.getUsername());
-        return "adminFunc";
-    }
-*/
     @GetMapping("/userList")
     public String getUserListPage(Model model) {
         model.addAttribute("users", userRepo.findAll());
@@ -104,9 +89,11 @@ public class AdminController {
     }
 
     @PostMapping("/editEvents/{id}")
-    public String editEvents(@PathVariable("id") Long id,Event event,@RequestParam("file") MultipartFile file, Model model) {
+    public String editEvents(@PathVariable("id") Long id, Event event, @RequestParam("file") MultipartFile file, Model model) {
         event.setId(id);
-        event.setPicture("http://localhost:8080/picture/" + file.getOriginalFilename());
+        if (!file.getOriginalFilename().equals("")) {
+            event.setPicture("http://localhost:8080/picture/" + file.getOriginalFilename());
+        }
         eventRepo.save(event);
         model.addAttribute("events", eventRepo.findAll());
         return "adminFunc";
@@ -138,13 +125,4 @@ public class AdminController {
         model.addAttribute("orders", orderRepo.findAll());
         return "adminFunc";
     }
-
-
-  /*  @PutMapping("{id}")
-    public String update(@PathVariable("id") User userFromDb, @RequestBody User user) {
-        BeanUtils.copyProperties(user, userFromDb, "id");
-        userRepo.save(userFromDb);
-        return "adminFunc";
-    }*/
-
 }

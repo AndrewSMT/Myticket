@@ -4,15 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -34,6 +31,7 @@ public class User implements UserDetails {
     @CollectionTable(name = "user_role",joinColumns = @JoinColumn(name = "id_user"))
     private Set<Role> roles;
     private String activationCode;
+    private String picture;
 
     public boolean isAdmin(){
         return roles.contains(Role.ADMIN);

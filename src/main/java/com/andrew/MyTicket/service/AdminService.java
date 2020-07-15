@@ -1,10 +1,8 @@
 package com.andrew.MyTicket.service;
 
-import com.andrew.MyTicket.dto.AddTicketsDto;
+import com.andrew.MyTicket.transfer.AddTicketsDto;
 import com.andrew.MyTicket.model.Event;
-import com.andrew.MyTicket.model.Role;
 import com.andrew.MyTicket.model.Ticket;
-import com.andrew.MyTicket.model.User;
 import com.andrew.MyTicket.repositories.EventRepo;
 import com.andrew.MyTicket.repositories.TicketRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,11 +35,9 @@ public class AdminService {
             }
 
             event.setDate(date);
-
-            if (event.getPicture() != null) {
-                file.transferTo(new File(uploadPath + "/" + file.getOriginalFilename()));
-                event.setPicture("http://localhost:8080/picture/" + file.getOriginalFilename());
-            }
+        if (!file.getOriginalFilename().equals("")) {
+            event.setPicture("http://localhost:8080/picture/" + file.getOriginalFilename());
+        }
             eventRepo.save(event);
         return true;
     }
@@ -75,7 +69,6 @@ public class AdminService {
                     Ticket ticket = addTicketsDto.ticketBuilder(addTicketsDto, eventFromDb, i, j);
                     ticketRepo.save(ticket);
                 } else {
-                 //   ticketMap.put(ticketRepo.findTicketByRowAndNumber(i, j).toString(), false);
                     ticketMap.put( "Tickets already exist", false);
                     break;
                 }
@@ -83,5 +76,4 @@ public class AdminService {
         }
         return ticketMap;
     }
-
 }

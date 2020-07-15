@@ -29,7 +29,7 @@
         </tr>
         </thead>
         <tbody th:each="order: ${orders}">
-        <tr>
+        <tr th:if="${orders != null}">
             <td th:text="${order.id_order}"></td>
             <td th:text="${order.user.username}"></td>
             <td th:text="${order.orderStatus}"></td>
@@ -45,6 +45,9 @@
         </tr>
         </tbody>
     </table>
+    <div th:if="${orders.isEmpty()}"  class="alert alert-info  m-5" role="alert">
+        <p>You  don't have orders.</p>
+    </div>
 </div>
 </div>
 <div th:if="${orders == null}" class="alert alert-info  m-5">

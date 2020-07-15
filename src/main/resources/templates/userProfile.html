@@ -18,66 +18,89 @@
     </div>
     <div id="profile">
         <H1>About me</H1>
-        <div id="profile-icon"></div>
+        <div id="profile-icon" th:if="${user.picture == null}"></div>
+        <img id="profile-icon-img" th:if="${user.picture != null}" th:src="${user.picture}">
+        <form th:action="@{/user/userProfile}"  method="post" enctype="multipart/form-data">
+            <div class="input-group is-invalid w-75 mt-2">
+            <div class="custom-file">
+                <input type="file" class="custom-file-input w-50" id="validatedInputGroupCustomFile" name="userpic" required>
+                <label class="custom-file-label" for="validatedInputGroupCustomFile">Choose file...</label>
+            </div>
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit">Confirm</button>
+            </div>
+        </div>
+        </form>
         <hr>
         <p th:if="${success== true}" class="text-success">Edit success</p>
         <div>Username: <span th:text="${user.username}"></span>
-            <button  class="img-edit-button" type="submit" onclick="disp(document.getElementById('username-form'),
+            <button class="img-edit-button" type="submit" onclick="disp(document.getElementById('username-form'),
             document.getElementById('email-form'),
-            document.getElementById('password-form'))"></button></div>
+            document.getElementById('password-form'))"></button>
+        </div>
 
-        <form method="post"  id="username-form" th:action="@{/user/userProfile}"  style="display: none;">
+        <form method="post" id="username-form" th:action="@{/user/userProfile}" style="display: none;">
             <div class="form-group w-75">
-                <input th:if="${usernameError == null}" type="text" minlength="4" maxlength="22" class="form-control mb-3" placeholder="username"
+                <input th:if="${usernameError == null}" type="text" minlength="4" maxlength="22"
+                       class="form-control mb-3" placeholder="username"
                        name="username" autofocus="autofocus">
-                <input th:if="${usernameError != null}" type="text" minlength="4" maxlength="22"th:value="${user.username}" class="form-control  is-invalid"
+                <input th:if="${usernameError != null}" type="text" minlength="4" maxlength="22"
+                       th:value="${user.username}" class="form-control  is-invalid"
                        placeholder="username"
                        name="username" autofocus="autofocus">
-                <div class="invalid-feedback" th:text="${usernameError}"></div> <button type="submit" class="btn btn-info m-1 w-50">Confirm</button>
+                <div class="invalid-feedback" th:text="${usernameError}"></div>
+                <button type="submit" class="btn btn-info m-1 w-50">Confirm</button>
             </div>
         </form>
 
         <div>Email: <span th:text="${user.email}"></span>
-            <button type="submit"class="img-edit-button" onclick="disp(document.getElementById('email-form'),
+            <button type="submit" class="img-edit-button" onclick="disp(document.getElementById('email-form'),
             document.getElementById('username-form'),
-            document.getElementById('password-form'))"></button></div>
-
-
-
-        <form method="post"  id="email-form" th:action="@{/user/userProfile}"  style="display: none;">
-        <div class="form-group w-75">
-            <input th:if="${emailError == null}" type="email" class="form-control mb-3" placeholder="email"
-                   name="email" autofocus="autofocus">
-            <input th:if="${emailError != null}" type="email" th:value="${user.email}" class="form-control is-invalid" placeholder="email"
-                   name="email" autofocus="autofocus">
-            <div class="invalid-feedback" th:text="${emailError}"></div>
-            <button type="submit" class="btn btn-info m-1 w-50">Confirm</button>
+            document.getElementById('password-form'))"></button>
         </div>
-    </form>
+
+
+        <form method="post" id="email-form" th:action="@{/user/userProfile}" style="display: none;">
+            <div class="form-group w-75">
+                <input th:if="${emailError == null}" type="email" class="form-control mb-3" placeholder="email"
+                       name="email" autofocus="autofocus">
+                <input th:if="${emailError != null}" type="email" th:value="${user.email}"
+                       class="form-control is-invalid" placeholder="email"
+                       name="email" autofocus="autofocus">
+                <div class="invalid-feedback" th:text="${emailError}"></div>
+                <button type="submit" class="btn btn-info m-1 w-50">Confirm</button>
+            </div>
+        </form>
         <button type="submit" class="btn btn-info mt-3 mb-3 w-50" onclick="disp(document.getElementById('password-form'),
         document.getElementById('email-form'),
-        document.getElementById('username-form'))">Chenge password</button>
+        document.getElementById('username-form'))">Chenge password
+        </button>
 
         <form method="post" th:action="@{/user/userProfile}" id="password-form" style="display: none;">
             <div class="form-group w-75">
-                <input th:if="${passwordError == null}"type="password" class="form-control mb-3" minlength="8" maxlength="22"placeholder="password" name="password">
-                <input th:if="${passwordError != null}" type="password"  class="form-control is-invalid" minlength="8" maxlength="22" placeholder="password" name="password">
+                <input th:if="${passwordError == null}" type="password" class="form-control mb-3" minlength="8"
+                       maxlength="22" placeholder="password" name="password">
+                <input th:if="${passwordError != null}" type="password" class="form-control is-invalid" minlength="8"
+                       maxlength="22" placeholder="password" name="password">
                 <div class="invalid-feedback" th:text="${passwordError}"></div>
-                <input th:if="${password2Error == null}" type="password" class="form-control mb-3" minlength="8" maxlength="22" placeholder="Repeat password" name="password2">
-                <input  th:if="${password2Error != null}" type="password" class="form-control is-invalid" minlength="8" maxlength="22"  placeholder="Repeat password" name="password2">
+                <input th:if="${password2Error == null}" type="password" class="form-control mb-3" minlength="8"
+                       maxlength="22" placeholder="Repeat password" name="password2">
+                <input th:if="${password2Error != null}" type="password" class="form-control is-invalid" minlength="8"
+                       maxlength="22" placeholder="Repeat password" name="password2">
                 <div class="invalid-feedback" th:text="${password2Error}"></div>
                 <button type="submit" class="btn btn-info m-1 w-50">Confirm</button>
             </div>
         </form>
         <hr>
-        <p th:if="${user.activationCode != null}"  class="text-danger">Your email address will not be activated, if you do not, you will not be able to order tickets !!!</p>
+        <p th:if="${user.activationCode != null}" class="text-danger">Your email address will not be activated, if you
+            do not, you will not be able to order tickets !!!</p>
     </div>
 
 
-    </div>
+</div>
 </div>
 <script>
-    function disp(form,form1,form2) {
+    function disp(form, form1, form2) {
         if (form.style.display == "none") {
             form.style.display = "block";
             form1.style.display = "none";

@@ -1,29 +1,24 @@
 package com.andrew.MyTicket.controller;
 
-import com.andrew.MyTicket.model.City;
 import com.andrew.MyTicket.model.Event;
 import com.andrew.MyTicket.model.Place;
 import com.andrew.MyTicket.repositories.CityRepo;
 import com.andrew.MyTicket.repositories.EventRepo;
 import com.andrew.MyTicket.repositories.PlaceRepo;
-import com.andrew.MyTicket.repositories.UserRepo;
 import com.andrew.MyTicket.service.EventService;
+import com.andrew.MyTicket.service.PdfCreator;
+import com.itextpdf.text.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -83,6 +78,9 @@ public class MainController {
         List<Event> events = new ArrayList<>();
         for (Place pl : places) {
             events.addAll(eventRepo.findEventsByPlace(pl));
+        }
+        if (events.isEmpty()) {
+            model.addAttribute("message", "Events not found");
         }
         model.addAttribute("events", events);
         return "main";

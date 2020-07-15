@@ -1,4 +1,4 @@
-package com.andrew.MyTicket.dto;
+package com.andrew.MyTicket.transfer;
 
 import lombok.Data;
 

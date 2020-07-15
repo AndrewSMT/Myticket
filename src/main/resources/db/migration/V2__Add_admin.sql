@@ -1,0 +1,2 @@
+insert into user (id_user, activation_code, email, password, picture, username) VALUES (1, null, 'mahina9866@nalafx.com', '$2a$08$NjYbM6zyfvTRo2.wXul/v.HhzeEFw2Wj8eP4WcPa2cXRKr2f43tWG', null, 'admin');
+insert into user_role (id_user,roles) values (1,1), (1,0);

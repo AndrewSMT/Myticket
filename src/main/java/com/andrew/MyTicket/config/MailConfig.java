@@ -22,8 +22,9 @@ public class MailConfig {
     private String protocol;
     @Value("${mail.debug}")
     private String debug;
+
     @Bean
-    public JavaMailSender getMailSender(){
+    public JavaMailSender getMailSender() {
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
         javaMailSender.setHost(host);
         javaMailSender.setUsername(username);
@@ -32,8 +33,8 @@ public class MailConfig {
 
         Properties javaMailProperties = javaMailSender.getJavaMailProperties();
 
-        javaMailProperties.setProperty("mail.transport.protocol",protocol);
-        javaMailProperties.setProperty("mail.debug",debug);
+        javaMailProperties.setProperty("mail.transport.protocol", protocol);
+        javaMailProperties.setProperty("mail.debug", debug);
 
         return javaMailSender;
     }

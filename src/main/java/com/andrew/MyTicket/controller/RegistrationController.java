@@ -4,18 +4,16 @@ import com.andrew.MyTicket.model.User;
 import com.andrew.MyTicket.repositories.UserRepo;
 import com.andrew.MyTicket.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Map;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/registration")
@@ -33,34 +31,45 @@ public class RegistrationController {
 
     @PostMapping
     public String addUser(@RequestParam("password2") String passwordConfirm,
-                          @Valid User user,
-                          BindingResult bindingResult, Model model) {
+                          @Valid User user, BindingResult bindingResult, Model model) {
         model.addAttribute("user", user);
         boolean Success = true;
+        boolean isConfirmEmpty = StringUtils.isEmpty(passwordConfirm);
         User userFromDb = userRepo.findByUsername(user.getUsername());
+
         if (userFromDb != null) {
             Success = false;
+            model.addAttribute("usernameError", "User exist");
         }
-        boolean isConfirmEmpty = StringUtils.isEmpty(passwordConfirm);
+
+        Pattern pattern = Pattern.compile("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).*$");
+        Matcher matcher = pattern.matcher(user.getPassword());
+
+        while (!matcher.find()) {
+            model.addAttribute("passwordError", "Password must contain lowercase and uppercase latin letters, numbers");
+            return "registration";
+        }
+
         if (isConfirmEmpty) {
             model.addAttribute("password2Error", "Password confirmation cannot be empty");
             Success = false;
         }
+
         if (user.getPassword() != null && !user.getPassword().equals(passwordConfirm)) {
             model.addAttribute("passwordError", "Password are different");
             Success = false;
         }
-        if (!Success) {
-            model.addAttribute("usernameError", "User exist");
-        }
-        if (bindingResult.hasErrors()) {
+
+        if (bindingResult.hasErrors() || userFromDb != null) {
             Map<String, String> errors = ControllerUtils.getErrors(bindingResult);
             model.mergeAttributes(errors);
             return "registration";
         }
-        if(Success){
+
+        if (Success) {
             userService.addUser(user);
         }
+
         return "redirect:/login";
     }
 

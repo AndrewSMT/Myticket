@@ -1,4 +1,4 @@
-package com.andrew.MyTicket.dto;
+package com.andrew.MyTicket.transfer;
 
 import com.andrew.MyTicket.model.Event;
 import com.andrew.MyTicket.model.Ticket;

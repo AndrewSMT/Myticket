@@ -18,7 +18,6 @@ public class EventService {
     @Autowired
     private EventRepo eventRepo;
 
-
     public Page<Event> findPaginated(Pageable pageable) {
         List<Event> events = eventRepo.findAll();
         int pageSize = pageable.getPageSize();

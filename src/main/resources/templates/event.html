@@ -16,12 +16,14 @@
             <span class="card-text" th:text="${event.place.city.title}"></span></p>
             <p><span th:text="${min}"></span>-<span th:text="${max}"></span> UAH (< <span th:text="${count}"/> psc.)</p>
             <p><a th:href="@{|/order/${event.id}|}" class="btn btn-warning">Make order</a></p>
-            <h2 class="card-text" >About event</h2>
-            <p class="card-text" th:text="${event.description}"></p>
         </div>
     </div>
     <div class="col mb-4">
     </div>
+</div>
+<div id="event-dis" class="border border-dark">
+    <h2 class="text-center border border-dark text-white bg-dark" >About event</h2>
+<p class="p-3" th:text="${event.description}"></p>
 </div>
 <div th:replace="fragments/footer"/>
 </body>

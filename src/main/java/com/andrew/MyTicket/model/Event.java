@@ -3,7 +3,6 @@ package com.andrew.MyTicket.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.sql.Date;
 
 @Data
 @Entity

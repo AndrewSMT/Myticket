@@ -3,7 +3,6 @@ package com.andrew.MyTicket.controller;
 import com.andrew.MyTicket.model.Event;
 import com.andrew.MyTicket.model.Ticket;
 import com.andrew.MyTicket.model.TicketStatus;
-import com.andrew.MyTicket.repositories.EventRepo;
 import com.andrew.MyTicket.repositories.TicketRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,14 +18,11 @@ import java.util.List;
 public class EventController {
 
     @Autowired
-    private EventRepo eventRepo;
-
-    @Autowired
     private TicketRepo ticketRepo;
 
 
     @GetMapping
-    public String get( Model model) {
+    public String get(Model model) {
         return "event";
     }
 

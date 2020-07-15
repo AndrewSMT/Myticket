@@ -1,13 +1,8 @@
-package com.andrew.MyTicket.dto;
+package com.andrew.MyTicket.transfer;
 
-import com.andrew.MyTicket.model.Role;
 import lombok.Data;
 
-import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import java.util.Set;
 
 @Data
 public class UserDto {
