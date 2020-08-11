@@ -14,7 +14,7 @@ create table event (
     id bigint not null,
     date varchar(255),
     description varchar(2048),
-    picture varchar(255),
+    picture varchar(2500),
     title varchar(255),
     id_place bigint,
     primary key (id));

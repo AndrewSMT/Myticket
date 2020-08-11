@@ -67,4 +67,10 @@ public class UserService implements UserDetailsService{
         mailSender.send(user.getEmail(),"Activation code", message);
         return message;
     }
+
+    public String sendConfirmEmail(String email,String code) {
+        String message = ("Hello, welcome to MyTicket. Please, enter this code to application: " + code);
+        mailSender.send(email,"Activation code", message);
+        return message;
+    }
 }

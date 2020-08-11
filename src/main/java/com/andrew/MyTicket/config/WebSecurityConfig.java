@@ -12,7 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
     @Autowired
     private UserService userService;
 
@@ -29,7 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/", "/event/**", "/login", "/registration/**", "/static/**", "/picture/**"
-                        , "/main/**","/event").permitAll()
+                        , "/main/**","/event","/mobile/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
