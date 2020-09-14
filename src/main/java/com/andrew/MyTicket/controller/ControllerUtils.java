@@ -7,7 +7,19 @@ import java.util.Map;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+/**
+ * Controller utils
+ *
+ * @author Andreii Matveiev
+ * @author andrei.matviev@gmail.com
+ */
 public class ControllerUtils {
+    /**
+     * Get errors
+     *
+     * @param bindingResult       Get bindingResult for check errors
+     * @return bindingResult map
+     */
     static Map<String, String> getErrors(BindingResult bindingResult) {
         Collector<FieldError, ?, Map<String, String>> collector = Collectors.toMap(
                 fieldError -> fieldError.getField() +

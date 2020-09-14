@@ -1,15 +1,14 @@
 package com.andrew.MyTicket.controller;
 
-import com.andrew.MyTicket.transfer.TicketFilterDto;
-import com.andrew.MyTicket.transfer.UserDto;
 import com.andrew.MyTicket.model.Orderr;
 import com.andrew.MyTicket.model.Ticket;
 import com.andrew.MyTicket.model.User;
 import com.andrew.MyTicket.repositories.OrderRepo;
 import com.andrew.MyTicket.repositories.UserRepo;
 import com.andrew.MyTicket.service.UserService;
+import com.andrew.MyTicket.transfer.TicketFilterDto;
+import com.andrew.MyTicket.transfer.UserDto;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -23,29 +22,73 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * UserController of user request
+ *
+ * @author Andreii Matveiev
+ * @author andrei.matviev@gmail.com
+ */
 @Controller
 @RequestMapping("/user")
 @PreAuthorize("hasAuthority('USER')")
 public class UserController {
-    @Autowired
-    private UserRepo userRepo;
 
-    @Autowired
-    private UserService userService;
+    /**
+     * Declaration UserRepo variable for dependency injection
+     */
+    private final UserRepo userRepo;
 
-    @Autowired
-    private OrderRepo orderRepo;
+    /**
+     * Declaration UserService variable for dependency injection
+     */
+    private final UserService userService;
 
+    /**
+     * Declaration OrderRepo variable for dependency injection
+     */
+    private final OrderRepo orderRepo;
+
+    /**
+     * Dependency injection into UserController with constructor
+     *
+     * @param userRepo    Inject User repository
+     * @param orderRepo   Inject Order repository
+     * @param userService Inject User service
+     */
+    public UserController(UserRepo userRepo, OrderRepo orderRepo, UserService userService) {
+        this.userRepo = userRepo;
+        this.orderRepo = orderRepo;
+        this.userService = userService;
+    }
+
+    /**
+     * Open userProfile page
+     *
+     * @param user  Get current User
+     * @param model Model of page
+     * @return String userProfile page
+     */
     @GetMapping("/userProfile")
     public String userEditPage(@AuthenticationPrincipal User user, Model model) {
         model.addAttribute("user", user);
         return "userProfile";
     }
 
+
+    /**
+     * Edit user date
+     *
+     * @param userpic  Get User load picture
+     * @param userLog Get current User
+     * @param user Get new User data
+     * @param model Model of page
+     * @return String userProfile page
+     */
     @PostMapping("/userProfile")
     public String userEdit(@RequestParam("userpic") MultipartFile userpic, @AuthenticationPrincipal User userLog, UserDto user, Model model) {
         boolean success = false;
         model.addAttribute("user", userLog);
+
         if (user.getUsername() != null) {
             if (user.getUsername().equals("")) {
                 model.addAttribute("usernameError", "Username cannot be empty");
@@ -54,6 +97,7 @@ public class UserController {
             success = true;
             userLog.setUsername(user.getUsername());
         }
+
         if (user.getEmail() != null) {
             if (user.getEmail().equals("")) {
                 model.addAttribute("emailError", "Email cannot be empty");
@@ -63,6 +107,7 @@ public class UserController {
             userLog.setEmail(user.getEmail());
             userService.sendEmail(userLog);
         }
+
         if (user.getPassword() != null) {
             if (user.getPassword().equals("")) {
                 model.addAttribute("passwordError", "Password cannot be empty");
@@ -89,9 +134,17 @@ public class UserController {
         userService.editUser(userLog);
         model.addAttribute("success", success);
         model.addAttribute("user", userLog);
+
         return "userProfile";
     }
 
+    /**
+     * Open userTickets page with list of all user tickets
+     *
+     * @param user Get current User data
+     * @param model Model of page
+     * @return String userTickets page
+     */
     @GetMapping("/userTickets")
     public String userTickets(@AuthenticationPrincipal User user, Model model) {
         List<Orderr> listOrder = orderRepo.findByUser(user);
@@ -101,14 +154,23 @@ public class UserController {
             listTicket.addAll(or.getTicket());
         }
 
-        if(!listTicket.isEmpty()) {
+        if (!listTicket.isEmpty()) {
             model.addAttribute("tickets", listTicket);
         }
 
         model.addAttribute("orders", listOrder);
+
         return "userTickets";
     }
 
+    /**
+     * Filter tickets of current User
+     *
+     * @param filter Get filter param
+     * @param user Get current User data
+     * @param model Model of page
+     * @return String userTickets page
+     */
     @GetMapping("/userTickets/filter/{param}")
     public String userTicketsFilter(@PathVariable("param") String filter, @AuthenticationPrincipal User user, Model model) {
         List<Orderr> listOrder = orderRepo.findByUser(user);
@@ -133,16 +195,27 @@ public class UserController {
 
         model.addAttribute("tickets", listTicket);
         model.addAttribute("orders", listOrder);
+
         return "userTickets";
     }
 
+    /**
+     * Filter tickets of current User
+     *
+     * @param filterForm Get filterForm param
+     * @param user Get current User data
+     * @param model Model of page
+     * @return String userTickets page
+     */
     @GetMapping("/userTickets/search")
     public String userTicketsFilter(TicketFilterDto filterForm, @AuthenticationPrincipal User user, Model model) {
         List<Orderr> listOrder = orderRepo.findByUser(user);
         Set<Ticket> listTicket = Collections.newSetFromMap(new ConcurrentHashMap<>());
+
         for (Orderr or : listOrder) {
             listTicket.addAll(or.getTicket());
         }
+
         if (!filterForm.getCity().isEmpty()) {
             for (Ticket tc : listTicket) {
                 if (!tc.getEvent().getPlace().getCity().getTitle().equals(filterForm.getCity())) {
@@ -150,6 +223,7 @@ public class UserController {
                 }
             }
         }
+
         if (!filterForm.getEvent().isEmpty()) {
             for (Ticket tc : listTicket) {
                 if (!tc.getEvent().getTitle().equals(filterForm.getEvent())) {
@@ -157,6 +231,7 @@ public class UserController {
                 }
             }
         }
+
         if (filterForm.getOrder() != null) {
             for (Ticket tc : listTicket) {
                 if (!tc.getOrderNumber().equals(filterForm.getOrder())) {
@@ -164,6 +239,7 @@ public class UserController {
                 }
             }
         }
+
         if (!filterForm.getDate().isEmpty()) {
             String date = filterForm.getDate().substring(0, 10) + ", " + filterForm.getDate().substring(11, 16);
             for (Ticket tc : listTicket) {
@@ -172,11 +248,19 @@ public class UserController {
                 }
             }
         }
+
         model.addAttribute("tickets", listTicket);
         model.addAttribute("orders", listOrder);
+
         return "userTickets";
     }
-
+    /**
+     * Open userOrders page
+     *
+     * @param user  Get current User
+     * @param model Model of page
+     * @return String userProfile page
+     */
     @GetMapping("/userOrders")
     public String userOrders(@AuthenticationPrincipal User user, Model model) {
         List<Orderr> listOrder = orderRepo.findByUser(user);
@@ -184,12 +268,25 @@ public class UserController {
         return "userOrders";
     }
 
+    /**
+     * Open userProfile page
+     *
+     * @param model Model of page
+     * @return String userProfile page
+     */
     @GetMapping
-    public String list(Model model) {
+    public String userList(Model model) {
         model.addAttribute("users", userRepo.findAll());
         return "adminFunc";
     }
 
+    /**
+     * Open userProfile page
+     *
+     * @param userFromDb  Get current User
+     * @param user Get new User data
+     * @return String adminFunc page
+     */
     @PutMapping("{id}")
     public String update(@PathVariable("id") User userFromDb, @RequestBody User user) {
         BeanUtils.copyProperties(user, userFromDb, "id");

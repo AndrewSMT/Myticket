@@ -1,6 +1,8 @@
 package com.andrew.MyTicket.model;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -17,4 +19,5 @@ public class Event {
     private String title;
     private String description;
     private String picture;
+
 }

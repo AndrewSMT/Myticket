@@ -10,25 +10,48 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+/**
+ * Configuration spring security
+ *
+ * @author Andreii Matveiev
+ * @author andrei.matviev@gmail.com
+ */
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private UserService userService;
 
+    /**
+     * Dependency injection UserService into WebSecurityConfig
+     */
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private  UserService userService;
 
+    /**
+     * Dependency injection PasswordEncoder into WebSecurityConfig
+     */
+    @Autowired
+    private  PasswordEncoder passwordEncoder;
+
+    /**
+     * Set password encoder type
+     *
+     * @return Instance of BCryptPasswordEncoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(8);
     }
 
+    /**
+     * Set security configuration
+     *
+     * @param http HttpSecurity
+     */
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
                 .antMatchers("/", "/event/**", "/login", "/registration/**", "/static/**", "/picture/**"
-                        , "/main/**","/event","/mobile/**").permitAll()
+                        , "/main/**", "/event", "/mobile/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -40,6 +63,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .rememberMe().key("uniqueAndSecret");
     }
 
+    /**
+     * Set authentication config
+     *
+     * @param auth AuthenticationManagerBuilder
+     */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService)

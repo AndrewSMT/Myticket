@@ -4,7 +4,6 @@ import com.andrew.MyTicket.model.Event;
 import com.andrew.MyTicket.model.Ticket;
 import com.andrew.MyTicket.model.TicketStatus;
 import com.andrew.MyTicket.repositories.TicketRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,21 +12,48 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
+/**
+ * Controller of event requests
+ *
+ * @author Andreii Matveiev
+ * @author andrei.matviev@gmail.com
+ */
 @Controller
 @RequestMapping("/event")
 public class EventController {
 
-    @Autowired
-    private TicketRepo ticketRepo;
+    /**
+     * Declaration TicketRepo variable for dependency injection
+     */
+    private final TicketRepo ticketRepo;
 
+    /**
+     * Dependency injection into EventController with constructor
+     *
+     * @param ticketRepo   Inject TicketRepo
+     */
+    public EventController(TicketRepo ticketRepo) {
+        this.ticketRepo = ticketRepo;
+    }
 
+    /**
+     * Open event page
+     *
+     * @return String event page
+     */
     @GetMapping
-    public String get(Model model) {
+    public String getEventPage() {
         return "event";
     }
 
+    /**
+     * Open event page by id
+     * @param event Get event by path variable id
+     * @param model Model of page
+     * @return String event page
+     */
     @GetMapping("{id}")
-    public String getEvent(@PathVariable("id") Event event, Model model) {
+    public String getOneEvent(@PathVariable("id") Event event, Model model) {
         Integer min = ticketRepo.findTicketByMinPrice(event);
         Integer max = ticketRepo.findTicketByMaxPrice(event);
         List<Ticket> tickets = ticketRepo.findTicketsByEventAndTicketStatus(event, TicketStatus.ACTIVE);

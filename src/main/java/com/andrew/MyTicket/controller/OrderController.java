@@ -3,7 +3,6 @@ package com.andrew.MyTicket.controller;
 import com.andrew.MyTicket.model.*;
 import com.andrew.MyTicket.repositories.TicketRepo;
 import com.andrew.MyTicket.service.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,27 +17,57 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * OrderController for order requests
+ *
+ * @author Andreii Matveiev
+ * @author andrei.matviev@gmail.com
+ */
 @SessionAttributes({"userCart", "order"})
-
 @Controller
 @RequestMapping("/order")
 public class OrderController {
 
-    @Autowired
-    private TicketRepo ticketRep;
+    /**
+     * Declaration TicketRepo variable for dependency injection
+     */
+    private final TicketRepo ticketRep;
 
-    @Autowired
-    private OrderService orderService;
+    /**
+     * Declaration OrderService variable for dependency injection
+     */
+    private final OrderService orderService;
 
+    /**
+     * Dependency injection into OrderController with constructor
+     *
+     * @param ticketRep    Inject Ticket repository
+     * @param orderService Inject Order service
+     */
+    public OrderController(TicketRepo ticketRep, OrderService orderService) {
+        this.ticketRep = ticketRep;
+        this.orderService = orderService;
+    }
 
+    /**
+     * Open order page with tickets of selected event
+     *
+     * @param user        Get current User
+     * @param event       Get Event by path variable id
+     * @param httpSession Get HttpSession as param
+     * @param model       Model of page
+     * @return String order page
+     */
     @GetMapping("{id}")
     private String getTickets(@AuthenticationPrincipal User user, @PathVariable("id") Event event, HttpSession httpSession, Model model) {
         List<Ticket> tickets = ticketRep.findTicketByEvent(event);
+        Cart cart = (Cart) httpSession.getAttribute("userCart");
         Set<Integer> setRow = new HashSet<>();
+
         for (Ticket t : tickets) {
             setRow.add(t.getRow());
         }
-        Cart cart = (Cart) httpSession.getAttribute("userCart");
+
         if (cart != null) {
             for (Ticket ticket : tickets) {
                 for (Ticket cartT : cart.getTicket()) {
@@ -51,18 +80,29 @@ public class OrderController {
                 }
             }
         }
+
         model.addAttribute("setRow", setRow);
         model.addAttribute("user", user);
         model.addAttribute("tickets", tickets);
+
         return "order";
     }
 
+    /**
+     * Add selected ticket in cart of current user
+     *
+     * @param user        Get current User
+     * @param ticket      Get Ticket by path variable id
+     * @param httpSession Get HttpSession as param
+     * @return String order on cart page
+     */
     @GetMapping("/ticket/{id}")
-    private String addTicketToCart(HttpSession httpSession, @PathVariable("id") Ticket ticket, @AuthenticationPrincipal User user, Model model) {
+    private String addTicketToCart(@AuthenticationPrincipal User user, @PathVariable("id") Ticket ticket, HttpSession httpSession) {
         Orderr order = (Orderr) httpSession.getAttribute("order");
         Cart cart = (Cart) httpSession.getAttribute("userCart");
-        ticket.getTicketStatus().clear();
         Set<TicketStatus> ticketStatuses = new HashSet<>();
+
+        ticket.getTicketStatus().clear();
         ticketStatuses.add(TicketStatus.BLOCKED);
         ticket.setTicketStatus(ticketStatuses);
         ticketRep.save(ticket);
@@ -87,32 +127,20 @@ public class OrderController {
 
         httpSession.setAttribute("userCart", cart);
         httpSession.setAttribute("order", order);
+
         return "redirect:/order/" + ticket.getEvent().getId();
     }
 
+    /**
+     * After adding a ticket to the cart, starts the ticket purchase timer
+     *
+     * @param user        Get current User
+     * @param httpSession Get HttpSession as param
+     * @param model       Model of page
+     */
     @GetMapping("/ticket/timeout")
     private void orderTimeOut(@AuthenticationPrincipal User user, HttpSession httpSession, Model model) {
-        Runnable run = () -> {
-            try {
-                Thread.sleep(900000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Cart cart = (Cart) httpSession.getAttribute("userCart");
-            if (cart.getTicket() != null) {
-                Set<Ticket> tickets = cart.getTicket();
-                for (Ticket ticket : tickets) {
-                    if (ticket.getTicketStatus().contains(TicketStatus.BLOCKED)) {
-                        ticket.setTicketStatus(Collections.singleton(TicketStatus.ACTIVE));
-                        ticketRep.save(ticket);
-                    }
-                }
-            }
-            httpSession.removeAttribute("userCart");
-            model.addAttribute("userCart", httpSession.getAttribute("userCart"));
-        };
-        Thread myThread = new Thread(run, user.getUsername());
-        myThread.start();
+       orderService.startTicketTimer(httpSession,model,user);
     }
 }
 
