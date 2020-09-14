@@ -73,7 +73,7 @@ public class OrderJsonController {
             ticketRepo.save(ticket);
             userCart.getTicket().add(ticket);
         }
-        orderService.addOrderFinished(userCart.getTicket(), user,orderr);
+        orderService.addFinishedOrder(userCart.getTicket(), user,orderr);
         pdfCreator.createPdfOrder(userCart, fileName);
         mailSender.sendPdf(email, "Tickets", fileName);
         return "true";
@@ -82,6 +82,14 @@ public class OrderJsonController {
     @GetMapping("/confirm")
     public String emailConfirm(@RequestParam("email") String email, @RequestParam("code") String code) {
         userService.sendConfirmEmail(email, code);
+        return "true";
+    }
+    @GetMapping("/delete/{id}")
+    public String deleteTicketFromCart(@PathVariable("id") Ticket ticket) {
+        Set<TicketStatus> ticketStatuses = new HashSet<>();
+        ticketStatuses.add(TicketStatus.ACTIVE);
+        ticket.setTicketStatus(ticketStatuses);
+        ticketRepo.save(ticket);
         return "true";
     }
 }
